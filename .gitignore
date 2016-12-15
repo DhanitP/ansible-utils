@@ -1,0 +1,6 @@
+*~
+#emacs bullshits
+.\#*
+\#*\#
+*.retry
+filter_plugins/*.pyc

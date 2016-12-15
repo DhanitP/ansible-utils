@@ -1,0 +1,21 @@
+---
+- name: "Parses the EC2-TAGS , then decide and act."
+  hosts: localhost
+  connection: local
+  vars:
+    - REGION: us-west-1
+  tasks:
+    - name: "Updating the ec2-meta"
+      script: ec2meta.sh
+      ignore_errors: True
+      register: stdout
+
+
+    - name: "Check shutdown status  ?? "
+      fail:
+        msg: "Not shutting the system because tag:shutdown_today is False"
+      when: stdout.rc == 1
+
+
+    - name: "Sending  init 0 to the system"
+      command: "/sbin/init 0"
