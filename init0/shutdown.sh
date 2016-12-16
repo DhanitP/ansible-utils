@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "please find the log at /tmp/shutdown.log"
+exec 2>&1 > /tmp/shutdown.log
+
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
 
 REGION="us-west-1"
