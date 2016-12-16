@@ -25,9 +25,10 @@ echo "tags:shutdown_today=$shutdown_today"
 echo "checking the shutdown_today value"
 if [ "$shutdown_today" = "False" ]
 then
-        echo "Do not shutdown"
-        exit 1
+    echo "Do not shutdown"
+    exit 1
 else
-        echo "Shutdown the system"
-        exit 0
+    echo "/sbin/init 0"
+    /sbin/init 0
+    exit 0
 fi
