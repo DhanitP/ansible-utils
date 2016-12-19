@@ -1,0 +1,13 @@
+---
+- name: Puts/Removes/Edits Cron
+  hosts:
+    - tag_spin_True
+  become: True
+  tasks:
+    - name: Adding Shutdown Cron
+      cron:
+        name: "tag based shutdown"
+        minute: "15"
+        hour: "14"
+        job: "/usr/bin/curl -s 'https://raw.githubusercontent.com/cloudfactory/ansible-utils/master/init0/shutdown.sh' | sh"
+        state: present

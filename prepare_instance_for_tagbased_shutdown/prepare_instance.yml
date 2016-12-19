@@ -1,0 +1,19 @@
+---
+- name: "Preparing the Instances .... .... ..."
+  hosts:
+    - tag_spin_True
+  gather_facts: False
+  vars_files:
+    - vars/prepare_instance.yml
+  roles:
+    - role: pip
+      python_version: "{{python_version}}"
+      tags:
+        - install_python
+
+  tasks:
+    - include: install_awscli.yml
+      become: True
+      tags:
+        - install_awscli
+    

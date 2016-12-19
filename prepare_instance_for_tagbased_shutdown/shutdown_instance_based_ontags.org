@@ -1,0 +1,13 @@
+#+TITLE: shutting down the instances based on the tag:shutdown:today
+#+DATE: Mon Dec 12 13:31:58 NPT 2016
+
+* TODO  Instance लाई तयािर अबस्था मा पुरा्ऊने [0/5]
+  - [ ] nsible खेल लेख्न ्
+    - [ ] Reading the ~tag:shutdown_today~ tags form the instance.
+    - [ ] Based on the tag:value
+      - [ ] shutdown if true
+      - [ ] do-nothing if false. [/]
+  - [ ] लेिखएको खेललाई push to ।
+  - [ ] Writing a CRON template
+  - [ ]  Updating the CRON
+  - [ ] nsible /installation/, nsible pull  fire हान्न सकोस ।
