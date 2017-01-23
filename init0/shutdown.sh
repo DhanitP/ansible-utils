@@ -1,17 +1,28 @@
 #!/bin/bash
-
 echo "please find the log at /tmp/shutdown.log"
 exec 2>&1 > /tmp/shutdown.log
 
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
-
 REGION="us-west-1"
 META=/tmp/meta
 TAGS=/tmp/tags
 
+##### SHUTDOWN CONDITIONS
+function time_to_int(){
+
+    hours=$(echo $1 | awk -F':'  '{print $1}')
+    minutes=$(echo $1 | awk -F':'  '{print $2}')
+    minutes=$(echo "$hours*60 + $minutes" | bc)
+    echo $minutes
+}
+
+SHUTDOWN_TIME=$(time_to_int 13:15)
+CURRENT_TIME=$(time_to_int `date +%H:%M`)
+
+
 ## Getting the ec2 metadata
 echo "fetching ec2 metadata from $REGION..."
-until /usr/bin/ec2metadata | tee $META; do :; done
+until ec2metadata | tee $META; do :; done
 
 ## Getting the instance_id
 echo
@@ -24,25 +35,34 @@ echo "instance-id: $instance_id"
 echo
 echo
 echo "getting tags for $instance_id from $REGION..."
-until /usr/local/bin/aws ec2 describe-tags --filters "Name=resource-id,Values=$instance_id" --region="$REGION" --output=text | tee $TAGS; do :; done
+until aws ec2 describe-tags --filters "Name=resource-id,Values=$instance_id" --region="$REGION" --output=text | tee $TAGS; do :; done
 
 ### AWKing the tags:shutdown_today
 echo
 echo
 echo "AWKing the tags from $TAGS..."
-shutdown_today=$(/usr/bin/awk "/shutdown_today/"'{print $5}' < $TAGS)
-echo "Found tags:shutdown_today=$shutdown_today"
+SHUTDOWN_TODAY=$(awk "/shutdown_today/"'{print $5}' < $TAGS)
+echo "Found tags:shutdown_today=$SHUTDOWN_TODAY"
 
 ### Do or Die 
 echo
 echo
 echo "DO or Die ..."
-if [ "$shutdown_today" = "False" ]
+echo "shutdown time: $SHUTDOWN_TIME current time:$CURRENT_TIME"
+
+if [ "$CURRENT_TIME" -ge "$SHUTDOWN_TIME" ]
 then
-    echo "Do not shutdown"
-    exit 1
+
+    if [ "$SHUTDOWN_TODAY" = "False" ]
+    then
+	echo "Do not Shutdown"
+	exit 1;
+    else
+	echo "init 0"
+	/sbin/init 0
+	exit 0;
+    fi
 else
-    echo "/sbin/init 0"
-    /sbin/init 0
-    exit 0
+    echo "Not the time to Shutdown the Instance"
+    exit 3;
 fi
