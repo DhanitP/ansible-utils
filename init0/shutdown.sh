@@ -12,7 +12,7 @@ function time_to_int(){
 
     hours=$(echo $1 | awk -F':'  '{print $1}')
     minutes=$(echo $1 | awk -F':'  '{print $2}')
-    minutes=$(expr $hours \* 60 + $minutes ))
+    minutes=$(expr $hours \* 60 + $minutes )
     echo $minutes
 }
 
