@@ -16,7 +16,7 @@ function time_to_int(){
     echo $minutes
 }
 
-SHUTDOWN_TIME=$(time_to_int 15:45)
+SHUTDOWN_TIME=$(time_to_int 13:15)
 CURRENT_TIME=$(time_to_int `date +%H:%M`)
 
 
