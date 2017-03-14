@@ -59,7 +59,7 @@ then
 	exit 1;
     else
 	echo "init 0"
-	/sbin/init 0
+	#/sbin/init 0
 	exit 0;
     fi
 else
